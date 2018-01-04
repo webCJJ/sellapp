@@ -7,6 +7,7 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+
 /**
  * node 开发框架express 来启动server
  */
@@ -22,26 +23,7 @@ var ratings = appData.ratings;
  * 请求到的数据 定义一些路由
  */
 var apiRoutes = express.Router();
-apiRoutes.get('/seller', function (req, res) {
-  res.json({
-    error: 0,
-    data: seller
-  })
-})
-apiRoutes.get('/goods', function (req, res) {
-  res.json({
-    error: 0,
-    data: goods
-  })
-})
-apiRoutes.get('/ratings', function (req, res) {
-  res.json({
-    error: 0,
-    data: ratings
-  })
-})
-
-app.use('./api',apiRoutes)
+app.use('/api',apiRoutes)
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -70,6 +52,26 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
+    },
+    before(app) {
+      app.get('/api/seller', function (req, res) {
+        res.json({
+          error: 0,
+          data: seller
+        })
+      }),
+      app.get('/api/goods', function (req, res) {
+        res.json({
+          error: 0,
+          data: goods
+        })
+      }),
+      app.get('/api/ratings', function (req, res) {
+        res.json({
+          error: 0,
+          data: ratings
+        })
+      })
     }
   },
   plugins: [
