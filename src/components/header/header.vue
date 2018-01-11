@@ -19,7 +19,7 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-count">
+      <div v-if="seller.supports" class="support-count" @click="showDetail">
         <span class="count" >{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
@@ -27,6 +27,17 @@
     <div class="bulletin-wrapper">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
+    </div>
+    <div class="background">
+      <img :src="seller.avatar" width="100%" height="100%"/>
+    </div>
+    <div v-show="detailShow" class="detail">
+      <div class="detail-wrapper clearflx">
+        <div class="detail-main"></div>
+      </div>
+      <div class="detail-close">
+        <i class="icon-close"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -38,6 +49,16 @@
         type: Object
       }
     },
+    data() {
+     return {
+       detailShow: false
+     };
+  },
+    methods: {
+      showDetail() {
+        this.detailShow = true;
+      }
+    },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
   }
@@ -47,8 +68,10 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl";
   .header
+    position: relative
     color: #fff
-    background: #999
+    background: rgba(7, 17, 27, 0.5)
+    overflow: hidden
     .content-wrapper
       display: flex
       padding: 24px 12px 18px 24px
@@ -121,7 +144,7 @@
       .bulletin-title
         display: inline-block
         vertical-align: top
-        margin-top: 7px
+        margin-top: 8px
         width: 22px
         height: 12px
         bg-image('bulletin')
@@ -136,4 +159,38 @@
         font-size: 10px
         right: 12px
         top: 8px
+    .background
+      position: absolute
+      top: 0
+      bottom: 0
+      width: 100%
+      height: 100%
+      z-index: -1
+      filter: blur(10px)
+    .detail
+      position: fixed
+      top: 0
+      left: 0
+      z-index: 100
+      width: 100%
+      height: 100%
+      overflow: auto
+      background: rgba(7, 17, 27, 0.8)
+      .detail-wrapper
+        min-height: 100%
+        .detail-main
+          margin-top: 64px
+          padding-bottom: 64px
+      .detail-close
+        .icon-close
+           position: absolute;
+           width: 32px;
+           height: 32px;
+           font-size: 32px;
+           bottom: 32px;
+           left: calc( 50% - 16px );
+
+
+
 </style>
+
