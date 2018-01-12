@@ -33,10 +33,13 @@
     </div>
     <div v-show="detailShow" class="detail">
       <div class="detail-wrapper clearflx">
-        <div class="detail-main"></div>
+        <div class="detail-main">
+          <h1 class="name">{{seller.name}}</h1>
+
+        </div>
       </div>
       <div class="detail-close">
-        <i class="icon-close"></i>
+        <i class="icon-close" @click="closeShow"></i>
       </div>
     </div>
   </div>
@@ -57,6 +60,9 @@
     methods: {
       showDetail() {
         this.detailShow = true;
+      },
+      closeShow() {
+        this.detailShow = false;
       }
     },
     created() {
@@ -181,14 +187,18 @@
         .detail-main
           margin-top: 64px
           padding-bottom: 64px
+          .name
+            line-height: 16px
+            text-align: center
+            font-size: 16px
       .detail-close
         .icon-close
-           position: absolute;
-           width: 32px;
-           height: 32px;
-           font-size: 32px;
-           bottom: 32px;
-           left: calc( 50% - 16px );
+           position: absolute
+           width: 32px
+           height: 32px
+           font-size: 32px
+           bottom: 32px
+           left: calc( 50% - 16px )
 
 
 
