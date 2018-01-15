@@ -35,7 +35,9 @@
       <div class="detail-wrapper clearflx">
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
-
+          <div class="star-wrapper">
+            <star :size="48" :score="seller.score"></star>
+          </div>
         </div>
       </div>
       <div class="detail-close">
@@ -46,6 +48,7 @@
 </template>
 
 <script type='text/ecmascript-6'>
+  import star from '../../components/star/star.vue';
   export default{
     props: {
       seller: {
@@ -67,6 +70,9 @@
     },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+  },
+  components: {
+    star
   }
   };
 </script>
@@ -191,6 +197,10 @@
             line-height: 16px
             text-align: center
             font-size: 16px
+            font-weight: 700
+          .star-wrapper
+            margin: 18px 0 28px 0
+            text-align: center
       .detail-close
         .icon-close
            position: absolute
@@ -199,6 +209,7 @@
            font-size: 32px
            bottom: 32px
            left: calc( 50% - 16px )
+
 
 
 
