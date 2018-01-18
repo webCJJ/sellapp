@@ -141,7 +141,7 @@
             margin-right: 4px
             background-size: 12px 12px
             background-repeat: no-repeat
-            vertical-align: bottom
+            margin-top: 2px
             &.decrease
               bg-image('decrease_1')
             &.discount
