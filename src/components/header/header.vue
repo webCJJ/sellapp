@@ -37,7 +37,9 @@
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
           <div class="star-wrapper">
+            <!-- :size传值 star组件props size接收type为 Number  -->
             <star :size="48" :score="seller.score"></star>
+
           </div>
           <div class="title">
             <div class="line"></div>
@@ -46,6 +48,7 @@
           </div>
           <ul v-if="seller.supports" class="supports">
             <li v-for="(item, index) in seller.supports" class="support-item">
+              <!-- :class 表示类 类里可以为表达式 可以为绑定js里的函数 方法-->
               <span class="icon" :class="classMap[seller.supports[index].type]"></span>
               <span class="text">{{seller.supports[index].description}}</span>
             </li>
@@ -71,7 +74,7 @@
 <script type='text/ecmascript-6'>
   import star from '../../components/star/star.vue';
   export default{
-    props: {
+    props: { // 参数的作用域不同，用props进行数据传递，使得外部传入的参数得以使用
       seller: {
         type: Object
       }

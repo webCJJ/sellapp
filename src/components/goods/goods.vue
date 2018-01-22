@@ -33,6 +33,7 @@
                 </div>
               </div>
               <div class="cart-control">
+                <!-- 选择食物 加减-->
                 <cartcontrol :food="food"></cartcontrol>
               </div>
             </li>
@@ -40,7 +41,9 @@
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <!-- html名字拼接用 -（中划线） js里接收-（中划线）去掉 后面的单词 第一个字母大写 -->
+    <!-- 购物车 :delivery-price传值 shopcart组件props deliveryPrice接收对象Object  -->
+    <shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 
 </template>
@@ -74,6 +77,17 @@
           };
         }
         return 0;
+      },
+      selectFoods() {
+        let foods = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     created() {
