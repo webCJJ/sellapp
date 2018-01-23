@@ -34,7 +34,7 @@
               </div>
               <div class="cart-control">
                 <!-- 选择食物 加减-->
-                <cartcontrol :food="food"></cartcontrol>
+                <cartcontrol @add="addFoods" :food="food"></cartcontrol>
               </div>
             </li>
           </ul>
@@ -43,7 +43,7 @@
     </div>
     <!-- html名字拼接用 -（中划线） js里接收-（中划线）去掉 后面的单词 第一个字母大写 -->
     <!-- 购物车 :delivery-price传值 shopcart组件props deliveryPrice接收对象Object  -->
-    <shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 
 </template>
@@ -111,6 +111,15 @@
       let foodList = this.$refs.foodList;
       let el = foodList[index];
       this.foodsScroll.scrollToElement(el, 300);
+    },
+    addFoods(target) {
+      this._drop(target);
+    },
+    _drop(target) {
+      // 体验优化 异步执行下落动画
+      this.$nextTick(() => {
+        this.$refs.shopcart.drop(target);
+      });
     },
     _initScroll() {
       this.menuScroll = new BScroll(this.$refs.menuWrapper, {
