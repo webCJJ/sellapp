@@ -1,49 +1,52 @@
 <template>
-  <div class="goods">
-    <div class="menu-wrapper" ref="menuWrapper">
-      <ul>
-        <li v-for="(item,index) in goods" class="menu-item" :class="{'current': currentIndex === index}"
-          @click="selectMenu(index,$event)">
+  <div>
+    <div class="goods">
+      <div class="menu-wrapper" ref="menuWrapper">
+        <ul>
+          <li v-for="(item,index) in goods" class="menu-item" :class="{'current': currentIndex === index}"
+              @click="selectMenu(index,$event)">
           <span class="text border-1px" >
             <span v-show="item.type>0"  class="icon" :class="classMap[item.type]"></span>
             {{item.name}}
           </span>
-        </li>
-      </ul>
-    </div>
-    <div class="foods-wrapper" ref="foodsWrapper">
-      <ul>
-        <li v-for="item in goods" class="food-list" ref="foodList">
-          <h1 class="title">{{item.name}}</h1>
-          <ul>
-            <li v-for="food in item.foods" class="food-item border-1px">
-              <div class="food-icon">
-                <img width="57" height="57"  :src="food.icon" />
-              </div>
-              <div class="content">
-                <h2 class="name">{{food.name}}</h2>
-                <p class="desc">{{food.description}}</p>
-                <div class="extra">
-                  <span class="count">月售{{food.sellCount}}份</span>
-                  <span>好评率{{food.rating}}%</span>
+          </li>
+        </ul>
+      </div>
+      <div class="foods-wrapper" ref="foodsWrapper">
+        <ul>
+          <li v-for="item in goods" class="food-list" ref="foodList">
+            <h1 class="title">{{item.name}}</h1>
+            <ul>
+              <li @click="selectFood(food,$event)"   v-for="food in item.foods" class="food-item border-1px">
+                <div class="food-icon">
+                  <img width="57" height="57"  :src="food.icon" />
                 </div>
-                <div class="price">
-                  <span class="now">￥{{food.price}}</span>
-                  <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
+                <div class="content">
+                  <h2 class="name">{{food.name}}</h2>
+                  <p class="desc">{{food.description}}</p>
+                  <div class="extra">
+                    <span class="count">月售{{food.sellCount}}份</span>
+                    <span>好评率{{food.rating}}%</span>
+                  </div>
+                  <div class="price">
+                    <span class="now">￥{{food.price}}</span>
+                    <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="cart-control">
-                <!-- 选择食物 加减-->
-                <cartcontrol @add="addFoods" :food="food"></cartcontrol>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
+                <div class="cart-control">
+                  <!-- 选择食物 加减-->
+                  <cartcontrol @add="addFoods" :food="food"></cartcontrol>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!-- html名字拼接用 -（中划线） js里接收-（中划线）去掉 后面的单词 第一个字母大写 -->
+      <!-- 购物车 :delivery-price传值 shopcart组件props deliveryPrice接收对象Object  -->
+      <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
     </div>
-    <!-- html名字拼接用 -（中划线） js里接收-（中划线）去掉 后面的单词 第一个字母大写 -->
-    <!-- 购物车 :delivery-price传值 shopcart组件props deliveryPrice接收对象Object  -->
-    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <food @add="addFoods" :food="selectedFood" ref="food"></food>
   </div>
 
 </template>
@@ -52,6 +55,7 @@
   import BScroll from 'better-scroll';
   import shopcart from '../../components/shopcart/shopcart.vue';
   import cartcontrol from '../../components/cartcontrol/cartcontrol.vue';
+  import food from '../../components/food/food.vue';
 
   const ERR_OK = 0;
   export default{
@@ -64,7 +68,8 @@
       return {
         goods: [],
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {}
       };
   },
     computed: {
@@ -112,10 +117,17 @@
       let el = foodList[index];
       this.foodsScroll.scrollToElement(el, 300);
     },
-    addFoods(target) {
+    selectFood(food, $event) {
+      if (!event._constructed) {
+        return;
+      }
+      this.selectedFood = food;
+      this.$refs.food.show(); // 调用子组件的方法
+    },
+    addFoods(target) { // 未带下划线的方法 可被外被调用 使用 编程习惯
       this._drop(target);
     },
-    _drop(target) {
+    _drop(target) {  // 带下划线的_ 的方法 是组件私有的方法 不被外部使用
       // 体验优化 异步执行下落动画
       this.$nextTick(() => {
         this.$refs.shopcart.drop(target);
@@ -146,7 +158,7 @@
     }
   },
   components: {
-    shopcart, cartcontrol
+    shopcart, cartcontrol, food
   }
   };
 </script>

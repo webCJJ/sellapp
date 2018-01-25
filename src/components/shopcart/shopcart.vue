@@ -369,7 +369,7 @@
           .price
             position: absolute
             right: 90px
-            bottom: 12px
+            bottom: 1px
             line-height: 24px
             font-size: 14px
             font-weight: 700
