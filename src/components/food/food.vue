@@ -31,9 +31,9 @@
           <p class="text">{{food.info}}</p>
         </div>
         <split v-show="food.info"></split>
-        <div class="info" v-show="food.info">
+        <div class="rating">
           <h1 class="title">商品评价</h1>
-          <p class="text">{{food.info}}</p>
+          <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></ratingselect>
         </div>
       </div>
     </div>
@@ -45,6 +45,11 @@
   import Vue from 'vue';
   import cartcontrol from '../../components/cartcontrol/cartcontrol.vue';
   import split from '../../components/split/split.vue';
+  import ratingselect from '../../components/ratingselect/ratingselect.vue';
+
+//  const POSITIVE = 0;
+//  const NEGATIVE = 1;
+  const ALL = 2;
 
   export default{
     props: {
@@ -54,12 +59,21 @@
     },
     data() {
      return {
-       showFlag: false
+       showFlag: false,
+       selectType: ALL, // show 的时候需要初始化
+       onlyContent: true,
+       desc: {
+         all: '全部',
+         positive: '推荐',
+         negative: '吐槽'
+       }
      };
     },
     methods: {
       show() {
         this.showFlag = true;
+        this.selectType = ALL; //  初始化 === default
+        this.onlyContent = true; // 初始化
         this.$nextTick(() => {
           if (!this.scroll) {
             this.scroll = new BScroll(this.$refs.food, {
@@ -85,7 +99,7 @@
       }
     },
   components: {
-    cartcontrol, split
+    cartcontrol, split, ratingselect
   }
   };
 </script>
@@ -181,6 +195,13 @@
         font-size: 12px
         line-height: 24px
         ccolor: rgb(77, 85, 93)
-
+    .rating
+      padding: 18px 26px 18px 18px
+      .title
+        margin-bottom: 6px
+        font-size: 14px
+        line-height: 14px
+        font-weight: 700
+        color: rgb(7, 17, 27)
 
 </style>
